@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
+      crossorigin="anonymous"
+    />
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}" type="text/css" />
+    <title>National Stock Exchange of India Limited</title>
+  </head>
+  <body>
+    <form action="{% url 'show_result' %}" method="POST">
+      {% csrf_token %}
+      <div class="container">
+        <div class="box">
+          <select
+            class="form-select form-select-sm"
+            aria-label=".form-select-sm example"
+            name="symbol"
+          >
+            <option selected>View Options Contracts for</option>
+            <option value="NIFTY">NIFTY</option>
+            <option value="FINNIFTY">FINNIFTY</option>
+            <option value="BANKNIFTY">BANKNIFTY</option>
+          </select>
+        </div>
+        <div class="box">
+          <select
+            class="form-select form-select-sm"
+            aria-label=".form-select-sm example"
+            name="expiry_date"
+          >
+            <option selected>Expiry Date</option>
+            {% for date in expiry_dates %}
+              <option value="{{ date }}">
+                {{ date }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="box">
+          <button class="btn btn-outline-primary">Show Result</button>
+        </div>
+      </div>
+    </form>
+    <table class="table table-hover">
+      {% if has_data %}
+      <tr>
+        <th class="table-secondary" style="text-align:center" colspan="12">
+          CALLS
+        </th>
+      </tr>
+      {% endif %}
+      <tr>
+        {% for key in ce_data.keys %}
+          {% if forloop.counter == 2 or forloop.counter == 3 or forloop.counter == 4 or forloop.counter == 7 or forloop.counter == 13 or forloop.counter == 14 or forloop.counter == 19 %}
+            <!-- do nothing -->
+          {% else %}
+            <th>{{ key }}</th>
+          {% endif %}
+        {% endfor %}
+      </tr>
+      {% for data in ce_data.values %}
+        <tr>
+          {% for value in data %}
+            {% if forloop.counter == 2 or forloop.counter == 3 or forloop.counter == 4 or forloop.counter == 7 or forloop.counter == 13 or forloop.counter == 14 or forloop.counter == 19 %}
+            <!-- do nothing  -->
+            {% elif forloop.counter == 1 %}
+              <td class="table-primary">{{ value }}</td>
+            {% elif forloop.counter == 11 or forloop.counter == 12 and value > 0 %}
+              <td class="table-success">{{ value }}</td>
+            {% elif forloop.counter == 11 or forloop.counter == 12 and value < 0 %}
+              <td class="table-danger">{{ value }}</td>
+            {% elif forloop.counter == 11 or forloop.counter == 12 and value == 0 %}
+              <td class="table-warning">{{ value }}</td>
+            {% else %}
+              <td>{{ value }}</td>
+            {% endif %}
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </table>
+    <table class="table table-hover">
+      {% if has_data %}
+      <tr>
+        <th class="table-secondary" style="text-align:center" colspan="12">
+          PUTS
+        </th>
+      </tr>
+      {% endif %}
+      <tr>
+        {% for key in pe_data.keys %}
+          {% if forloop.counter == 2 or forloop.counter == 3 or forloop.counter == 4 or forloop.counter == 7 or forloop.counter == 13 or forloop.counter == 14 or forloop.counter == 19 %}
+            <!-- do nothing -->
+          {% else %}
+            <th>{{ key }}</th>
+          {% endif %}
+        {% endfor %}
+      </tr>
+      {% for data in pe_data.values %}
+        <tr>
+          {% for value in data %}
+            {% if forloop.counter == 2 or forloop.counter == 3 or forloop.counter == 4 or forloop.counter == 7 or forloop.counter == 13 or forloop.counter == 14 or forloop.counter == 19 %}
+            <!-- do nothing  -->
+            {% elif forloop.counter == 1 %}
+              <td class="table-primary">{{ value }}</td>
+            {% elif forloop.counter == 11 or forloop.counter == 12 and value > 0 %}
+              <td class="table-success">{{ value }}</td>
+            {% elif forloop.counter == 11 or forloop.counter == 12 and value < 0 %}
+              <td class="table-danger">{{ value }}</td>
+            {% elif forloop.counter == 11 or forloop.counter == 12 and value == 0 %}
+              <td class="table-warning">{{ value }}</td>
+            {% else %}
+              <td>{{ value }}</td>
+            {% endif %}
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </table>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
