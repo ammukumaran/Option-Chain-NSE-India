@@ -8,7 +8,7 @@ import json
 
 def insert_data(data, ref):
     for value in data:
-        reference = CE() if ref == 1 else CE()
+        reference = CE() if ref == 1 else PE()
         timestamp = datetime.datetime.now()
         reference.timestamp = str(
             timestamp).split('.')[0].replace(' ', '_')  # e.g. YYYY-MM-DD_HH:MM:SS
